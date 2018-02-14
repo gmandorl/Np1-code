@@ -55,7 +55,7 @@ t3->SetNDC();
 t3->SetTextAlign(22);
 t3->SetTextSize(0.05);
 t3->Draw();
-cdc->Print(("figure/BDToutput/"+figname).c_str());
+c->Print(("figure/BDToutput/"+figname).c_str());
 }
 void efficiency_roc_Np1(){
 //	gROOT->ProcessLine(".x setTDRStyle.C");
@@ -73,8 +73,8 @@ void efficiency_roc_Np1(){
 
    /*     const int n_variables =9;
           std::string variables_names[n_variables]={ "nomore_LO_Pray_",  "nomore_LO_IgnoreNegWeightsInTraining_",  "nomore_NLO_Pray_", "nomore_NLO_IgnoreNegWeightsInTraining_" ,"nomore_NLO_noWeight_" ,"nomore_RpHard_OldSample_LO_","nomore_TT_LO_", "nomore_Random_","nomore_Random_LO_TT_"};/*/
-const int n_variables =31;
-std::string variables_names[n_variables]={"Inv_mass", "energytot", "W_mass_virtual1", "W_mass_virtual2", "qgl_1q", "qgl_2q", "thetastarW2", "thetastarW1", "theta1", "qq_pt", "theta2", "W_Pt_virtual1", "W_Pt_virtual2", "diffMassWWH", "Jet3_pt", "ll_zstar", "met_pt", "softLeadingJet_pt", "btagCMVA", "cosThetaStarJet", "WWmass", "impulsoZ", "cosThetaPlane", "softActivityEWK_njets2", "softActivityEWK_njets5", "softActivityEWK_njets10", "W_eta_virtual1", "W_eta_virtual2", "E_parton1", "E_parton2", "nomore"};                     
+const int n_variables =33;
+std::string variables_names[n_variables]={"Inv_mass", "energytot", "W_mass_virtual1", "qgl_1q", "qgl_2q", "thetastarW2", "thetastarW1", "theta1", "qq_pt", "theta2", "W_Pt_virtual2", "ll_eta", "EWKHTsoft", "DeltaEtaQQ", "diffMassWWH", "Jet3_pt", "met_pt", "softLeadingJet_pt", "btagCMVA", "cosThetaStarJet", "WWmass", "impulsoZ", "deltaMRel", "randomVariable", "cosThetaPlane", "softActivityEWK_njets2", "softActivityEWK_njets10", "W_eta_virtual1", "W_eta_virtual2", "E_parton1", "E_parton2", "deltaM","nomore"}
   /* "Inv_mass","energytot","W_mass_virtual1","qgl_1q","qgl_2q","thetastarW2", "thetastarW1", "theta1", "qq_pt", "theta2", "W_Pt_virtual2","ll_eta","EWKHTsoft", "DeltaEtaQQ","Jet2q_pt", "diffMassWWH", "Jet3_pt", "met_pt", "softLeadingJet_pt", "btagCMVA", "cosThetaStarJet", "WWmass", "impulsoZ", "cosThetaPlane", "softActivityEWK_njets2", "softActivityEWK_njets10", "W_eta_virtual1","W_eta_virtual2","E_parton1","E_parton2","nomore"/*/
         /*  std::string variables_names[n_variables]={"nomore_LO_PairNegWeightsGlobal_", "nomore_LO_Pray_", "nomore_LO_InverseBoostNegWeights_", "nomore_LO_IgnoreNegWeightsInTraining_", "nomore_NLO_PairNegWeightsGlobal_", "nomore_NLO_Pray_", "nomore_NLO_InverseBoostNegWeights_", "nomore_NLO_IgnoreNegWeightsInTraining_" , "nomore_NLO_noWeight_","nomore_RpHard_OldSample_LO_", "nomore_LO_noWeight_","nomore_RpHard_","nomore_TT_LO_","nomore_Random_","nomore_Random_Ignore_LO_TT_","nomore_Random_LO_TT_"};/*/
 //	const int n_variables =13  ;
@@ -99,7 +99,7 @@ std::string variables_names[n_variables]={"Inv_mass", "energytot", "W_mass_virtu
 	}
 
 
-	std::string end = "axis2jet2q";
+	std::string end = "muaxis2jet2q";
 	Double_t totalSensitivity[n_variables];
 	Double_t totalChiS[n_variables];
     Double_t totalChiB[n_variables];
@@ -109,14 +109,14 @@ std::string variables_names[n_variables]={"Inv_mass", "energytot", "W_mass_virtu
 	for (int i=0;i<n_variables;i++){
 		file_names[i] = "/afs/cern.ch/user/a/abonavit/private/tesi/training/CMSSW_8_0_28/src/training/TMVA-v4.2.0/test/output/TMVA_main_v25_Np1_"+file_names[i];
 //		file_names[i] = "/afs/cern.ch/user/g/gimandor/private/CMSSW_8_0_25/src/NadyaTreeAfterTMVA/TMVA_main_v25_Np1_"+file_names[i];
-		file_names[i] = file_names[i]+"mu"+end+".root";
+		file_names[i] = file_names[i]+"noVarTransform"+end+".root";
 //		file_names[i] = file_names[i]+"_2var.root";
 	}
 
 
 
-    int Nbins = 100;
-    float max = 5.;
+    int Nbins = 40;
+    float max = 4.;
 
 	for (int current_file=0;current_file<n_variables;current_file++){
 
@@ -138,6 +138,7 @@ std::string variables_names[n_variables]={"Inv_mass", "energytot", "W_mass_virtu
         
 //        float bdt = 0;
 //			tree->SetBranchAddress("BDTG",&bdt);
+
 //			for (int evt=0;evt<tree->GetEntries();evt++){
 //				tree->GetEntry(evt);
 //				float atanh_bdt= TMath::ATanH((bdt+1)/2.0);
@@ -145,17 +146,36 @@ std::string variables_names[n_variables]={"Inv_mass", "energytot", "W_mass_virtu
 //                hist_BDT_B->Fill(atanh_bdt);
 //            }
 
+    
 
         
         tree->Draw("atanh((BDTG+1.)/2.)>>hist_BDT_S", "(classID ==0 )");
         tree->Draw("atanh((BDTG+1.)/2.)>>hist_BDT_B", "(classID ==1 )");
         train_tree->Draw("atanh((BDTG+1.)/2.)>>hist_BDT_S_train", "(classID ==0 )");
         train_tree->Draw("atanh((BDTG+1.)/2.)>>hist_BDT_B_train", "(classID ==1 )");
+       
+           bool oltreBKG = false;
+        int lastGood=0;
+        float pippo;
+        for(int m=1; m <= 40;++m){
+          if( hist_BDT_B->GetBinContent(m)<0.5 && oltreBKG == false) {
+            oltreBKG = true;
+            lastGood=m-1;
+            cout<<"m="<<m<<endl;
+            }
+        if(oltreBKG){
+      hist_BDT_S->SetBinContent(lastGood,hist_BDT_S->GetBinContent(lastGood)+ hist_BDT_S->GetBinContent(m));
+      hist_BDT_S->SetBinContent(m,0);
+      hist_BDT_B->SetBinContent(lastGood,hist_BDT_B->GetBinContent(lastGood)+hist_BDT_B->GetBinContent(m));
+      hist_BDT_B->SetBinContent(m,0);
+		}
+         
+   } 
        // atanh((BDT_VBF+1.)/2.
-        hist_BDT_S->Scale(9.4*0.944/hist_BDT_S->Integral());
-        hist_BDT_B->Scale(8500./hist_BDT_B->Integral());
-        hist_BDT_S_train->Scale(9.4*0.944/hist_BDT_S_train->Integral());
-        hist_BDT_B_train->Scale(8500./hist_BDT_B_train->Integral());
+        hist_BDT_S->Scale(9.4/hist_BDT_S->Integral());
+        hist_BDT_B->Scale(8400./hist_BDT_B->Integral());
+        hist_BDT_S_train->Scale(9.4/hist_BDT_S_train->Integral());
+        hist_BDT_B_train->Scale(8400./hist_BDT_B_train->Integral());
         
     std::ostringstream curr_file;
     curr_file << current_file;
@@ -176,8 +196,8 @@ std::string variables_names[n_variables]={"Inv_mass", "energytot", "W_mass_virtu
             printf("signal= %6.3f \t ",SignalScan);
             printf("background = %6.3f \t",BackgroundScan);
             printf("totalSignal= %6.3f \t",signalIntegr);
-            printf("sensitivity =% 6.3f \t",SignalScan*SignalScan/(BackgroundScan+SignalScan));
-            totalSensitivity[current_file] += (((BackgroundScan+SignalScan) > 0.0001) && (SignalScan > 0.0001)) ? SignalScan*SignalScan/(BackgroundScan+SignalScan) : 0.;
+            printf("sensitivity =% 6.3f \t",SignalScan*SignalScan/(BackgroundScan));
+            totalSensitivity[current_file] += ((BackgroundScan > 0.0001) && (SignalScan > 0.0001)) ? SignalScan*SignalScan/(BackgroundScan) : 0.;
           printf("totalSensitivity =% 6.3f  \n",totalSensitivity[current_file]);     
         }
         totalSensitivity[current_file] = sqrt(totalSensitivity[current_file]);
@@ -222,9 +242,7 @@ double K_b= hist_BDT_B_train->KolmogorovTest(hist_BDT_B);
     prob_b <<prob_B ; 
     std::string Prob_B_string(prob_b.str());
     
-    
-    
-    
+
        drawSomething(hist_BDT_B, hist_BDT_B_train,"BDT_bkg"+curr_file_string+".png",K_b_string,Prob_B_string);
        drawSomething(hist_BDT_S, hist_BDT_S_train,"BDT_signal"+curr_file_string+".png",K_s_string,Prob_S_string);
 
@@ -253,8 +271,6 @@ cout<< totalChiS <<" " << totalChiB << endl;
 		cB->SetLeftMargin(.15);
 	
 
-		
-       
         gStyle->SetOptStat(0000);
 		TH1F *frame2 = new TH1F("frame2","",n_variables,0.,n_variables);
 		TH1F *hChi_S=new TH1F("hChi_S","",n_variables,0.,n_variables);
@@ -264,8 +280,8 @@ cout<< totalChiS <<" " << totalChiB << endl;
 	    
 	  frame2->SetMinimum(0.75);
       frame2->SetMaximum(.84);
-      frame2->SetMinimum(totalSensitivity[n_variables-1]*0.5);
-      frame2->SetMaximum(totalSensitivity[n_variables-1]*1.5);
+      frame2->SetMinimum(totalSensitivity[n_variables-1]*0.8);
+      frame2->SetMaximum(totalSensitivity[n_variables-1]*1.7);
       frame2->GetYaxis()->SetTitleOffset(1.5);
       frame2->GetXaxis()->SetTitleOffset(0.5);
       frame2->SetStats(0);
@@ -308,6 +324,7 @@ cout<< totalChiS <<" " << totalChiB << endl;
 
         c2->cd();
 		frame2->Draw();
+		//frame2->SaveAs("testN.root");
 		c2->SetBottomMargin(.3);
         gPad->SetGridx();
         gPad->SetGridy();
@@ -317,6 +334,9 @@ cout<< totalChiS <<" " << totalChiB << endl;
 		gr->SetMarkerStyle(20);
 		gr->SetLineWidth(2);
 		gr->Draw("PLsame");
+		gPad->SetGridx();
+        gPad->SetGridy();
+		gr->SaveAs("testNp1/test_noVarTransf.root");
 		
 		TGraph *grS = new TGraph(n_variables,totalProbS_axisx,totalProbS);
 		grS->SetMarkerStyle(20);
@@ -352,12 +372,12 @@ cout<< totalChiS <<" " << totalChiB << endl;
 		line2->Draw("Lsame");
 //		c2->Print("pippo.png");
 		c2->Print("efficiency_v2m5_mu.png");
+		//c2->SaveAs("test.root");
         cS->Print("figure/Chi2&KS_prob/chi2_signal.png");
         cB->Print("figure/Chi2&KS_prob/chi2_bkg.png");
 
        
 }
-
 
 
 

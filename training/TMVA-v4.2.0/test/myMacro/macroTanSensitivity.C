@@ -30,25 +30,24 @@ void setHistoStyle(TH1D* histo, int LineWidth) {
         histo->GetXaxis()->SetLabelSize(labelSize);
 }
 
-
+//TMVA_main_v25_Np1_nomoremuaxis2jet2q.root
 
 //int main(){
 void macroTanSensitivity(){
 
-        TFile *file = new TFile("/afs/cern.ch/user/a/abonavit/private/tesi/training/CMSSW_8_0_28/src/training/TMVA-v4.2.0/test/output/TMVA_main_v25_Np1_nomoremuaxis2jet2q.root");
-
+        TFile *file = new TFile("/afs/cern.ch/user/a/abonavit/private/tesi/training/CMSSW_8_0_28/src/training/TMVA-v4.2.0/test/output/TMVA_main_v25_Np1_nomorenoVarTransformmuaxis2jet2q.root");
+		TFile *Superimposed =new TFile("BDT_superimposed.root","recreate");
+		
         TTree *tree     = (TTree*)file->Get("TestTree");
-        int Nbins = 60;
+        int Nbins = 40;
         float max = 4.;
         TH1D *hist_BDT_S = new TH1D ("hist_BDT_S","", Nbins, 0., max);
         TH1D *hist_BDT_B = new TH1D ("hist_BDT_B","", Nbins, 0., max);
-        TH1D *hist_sensitivity = new TH1D ("","", Nbins, 0., max);
+        TH1D *hist_sensitivity = new TH1D ("hist_sensitivity","", Nbins, 0., max);
         hist_BDT_B->Sumw2();    
         hist_BDT_S->Sumw2();
         TCanvas * canv = new TCanvas("canv", "", 800, 600);    
-        canv->cd();
-        tree->Draw("atanh((BDTG+1.)/2.)>>hist_BDT_S", "(classID ==0 )");
-        tree->Draw("atanh((BDTG+1.)/2.)>>hist_BDT_B", "(classID ==1 )");
+
 
         gStyle->SetOptStat(0000);
 
@@ -72,7 +71,9 @@ void macroTanSensitivity(){
         hist_BDT_B->GetYaxis()->SetTitle("Expected events");
 
 
-
+        canv->cd();
+        tree->Draw("atanh((BDTG+1.)/2.)>>hist_BDT_S", "(classID ==0 )");
+        tree->Draw("atanh((BDTG+1.)/2.)>>hist_BDT_B", "(classID ==1 )");
         TLegend *leg = new TLegend(0.55,0.7,0.89,0.85);
         leg->SetFillColor(0);
         leg->SetBorderSize(0);
@@ -90,6 +91,7 @@ Double_t ErrDy=0;
         hist_BDT_S->Draw("hist");
         canv->Print("sensitivityTanPlot/hist_BDT_S.png");
         
+        
         hist_BDT_B->Draw("hist");
         canv->Print("sensitivityTanPlot/hist_BDT_B.png");
         
@@ -99,16 +101,58 @@ Double_t ErrDy=0;
        // hist_BDT_B->Scale(18000./hist_BDT_B->Integral());
         hist_BDT_S->Scale(9.4/hist_BDT_S->Integral());
         hist_BDT_B->Scale(8400./hist_BDT_B->Integral()); 
-      for(int n=50;n<60;n++)
-       cout<<"Integrale_bkg(x>"<<n/20.<<")=" << hist_BDT_B->IntegralAndError(n,100,ErrDy)<<"+-"<<ErrDy<<endl; 
+        
+        cout<< hist_BDT_S->Integral()<<endl;
+        
+      /*  bool oltreBKG = false;
+        int lastGood=0;
+        float pippo;
+        for(int m=1; m <= 40;++m){
+          if( hist_BDT_B->GetBinContent(m)<0.5 && oltreBKG == false) {
+            oltreBKG = true;
+            lastGood=m-1;
+            cout<<"m="<<m<<endl;
+            }
+        if(oltreBKG){
+      hist_BDT_S->SetBinContent(lastGood,hist_BDT_S->GetBinContent(lastGood)+ hist_BDT_S->GetBinContent(m));
+      hist_BDT_S->SetBinContent(m,0);
+      hist_BDT_B->SetBinContent(lastGood,hist_BDT_B->GetBinContent(lastGood)+hist_BDT_B->GetBinContent(m));
+      hist_BDT_B->SetBinContent(m,0);
+}
+     
+}/*/
+       bool oltreBKG = false;
+        int lastGood=0;
+        double width;
+        double sum=0;
+        for(int m=100; m==1;--m){
+        lastGood=m-1;
+        sum= hist_BDT_B->GetBinContent(lastGood)+hist_BDT_B->GetBinContent(m);
+        if(sum<0.5) {         
+         
+        }else if (sum>=0.5 && oltreBKG == false){
+        oltreBKG = true; 
+        hist_BDT_B->SetBinContent(m,sum);
+         break;
+         }
+        cout<<"m="<<m<<endl;
+            }
+
+
+     
+ cout<< hist_BDT_S->Integral()<<endl;
+
+      //for(int n=50;n<60;n++)
+       //cout<<"Integrale_bkg(x>"<<n/20.<<")=" << hist_BDT_B->IntegralAndError(n,100,ErrDy)<<"+-"<<ErrDy<<endl; 
          //(h2->IntegralAndError(0,h2->GetNbinsX(),ErrDy));     
         hist_BDT_S->GetYaxis()->SetRangeUser(0.01, 100000); 
+        hist_BDT_B->Write();
+        hist_BDT_S->Write();
         hist_BDT_S->Draw("hist");
         hist_BDT_B->Draw("hist same");
         leg->Draw("same");
 
         canv->Print("figure/sensitivityTanPlot/hist_BDT_SuperImposed.png");
-
 
 
         for (int n = 1; n <= hist_BDT_S->GetXaxis()->GetNbins(); n++) {
@@ -126,14 +170,16 @@ Double_t ErrDy=0;
 //                BackgroundScan += hist_MVA_BDTG_B->GetBinContent(m);
 //            }
 
-            hist_sensitivity->SetBinContent(n, (SignalScan > 0.0001) ? SignalScan/sqrt(BackgroundScan+SignalScan) : 0.); 
+            hist_sensitivity->SetBinContent(n, (BackgroundScan > 0.0001) ? SignalScan/sqrt(BackgroundScan) : 0.); 
         }
-
-
+//hist_sensitivity->SetBinContent(n, (SignalScan > 0.0001) ? SignalScan/sqrt(BackgroundScan+SignalScan) : 0.); 
+     
+      
+    
         float totalSensitivity = 0.;
         for (int n = 1; n < hist_sensitivity->GetXaxis()->GetNbins(); ++n) {
             totalSensitivity += hist_sensitivity->GetBinContent(n)*hist_sensitivity->GetBinContent(n);
-            std::cout << "bin " << n << " sensitivity   " << hist_sensitivity->GetBinContent(n) << " \t Sigma:   " << totalSensitivity << std::endl;
+            std::cout << "bin " << n << " sensitivity   " << hist_sensitivity->GetBinContent(n) << " \t Sigma:   " << totalSensitivity <<"signal  "<< hist_BDT_S->GetBinContent(n)<<" "<<"bkg "<<hist_BDT_B->GetBinContent(n)<< std::endl;
         }
         totalSensitivity = sqrt(totalSensitivity);
         std::cout << "Sigma: " << totalSensitivity << std::endl;
@@ -161,6 +207,7 @@ Double_t ErrDy=0;
 
         hist_sensitivity->Draw();
         tex->Draw();
+        hist_sensitivity->Write();
         canv->Print("figure/sensitivityTanPlot/hist_sensitivity.png");
         
         

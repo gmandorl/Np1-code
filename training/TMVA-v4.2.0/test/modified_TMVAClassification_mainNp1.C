@@ -120,7 +120,7 @@ int TMVAClassification_main(TString variable_name, TString type, std::vector<TSt
 	TString end = "axis2jet2q";
 	
 //    TString outfileName("output/v25/TMVA_main_v25_Nm1_"+variable_name+type+end+".root" );
-   TString outfileName("output/TMVA_main_v25_Np1_"+variable_name+type+end+".root" );
+   TString outfileName("output/TMVA_main_v25_Np1_"+variable_name+"noVarTransform"+type+end+".root" );
    TFile* outputFile = TFile::Open( outfileName, "RECREATE" );
 	ofstream out;
 // 	out.open("output/v25/txt/TMVA_main_v25_Nm1_"+variable_name+type+end+".txt"); 
@@ -217,32 +217,39 @@ int TMVAClassification_main(TString variable_name, TString type, std::vector<TSt
 // 	TString fname_bg_train ="main_tmva_tree_DYJetstoLL_madgraph_v25"+type+"_train_split_incl.root";
 
 //	TString fname_signal_test ="/afs/cern.ch/user/a/abonavit/private/tesi/training/CMSSW_8_0_28/src/main_tmva_tree_VBF_HToMuMu_v25mu_QCDScalenom_JESnom_509894Events.root";
-	TString fname_signal_test ="/afs/cern.ch/user/a/abonavit/private/tesi/training/CMSSW_8_0_28/src/training_17gen/main_tmva_tree_VBF_HToMuMu_v25mu_QCDScalenom_JESnom.root";
+	TString fname_signal_test ="/afs/cern.ch/user/a/abonavit/private/tesi/training/CMSSW_8_0_28/src/training_31gennaio/main_tmva_tree_VBF_HToMuMu_v25mu_QCDScalenom_JESnom.root";
 	
 	
 	
 //	TString fname_bg_test ="/afs/cern.ch/user/a/abonavit/private/tesi/training/CMSSW_8_0_28/src/main_tmva_tree_DYJetstoLL_amc_Filter105_v25mu_QCDScalenom_JESnom.root";main_tmva_tree_DYJetsToLL_M-105To160-madgraphMLM_v25mu_QCDScalenom_JESnom.rootbkgDY
-    TString fname_bg_test ="/afs/cern.ch/user/a/abonavit/private/tesi/training/CMSSW_8_0_28/src/training_17gen/main_tmva_tree_DYJetsToLL_M-105To160-madgraphMLM_v25mu_QCDScalenom_JESnom.root";
+    TString fname_bg_test ="/afs/cern.ch/user/a/abonavit/private/tesi/training/CMSSW_8_0_28/src/training_31gennaio/main_tmva_tree_DYJetsToLL_M-105To160-madgraphMLM_v25mu_QCDScalenom_JESnom.root";
   
 //sftp://abonavit@lxplus.cern.ch/afs/cern.ch/user/a/abonavit/private/tesi/training/CMSSW_8_0_28/src/training_11_gen
       //  /afs/cern.ch/user/a/abonavit/private/tesi/training/CMSSW_8_0_28/src
 //   TString fname_signal_train ="/afs/cern.ch/user/a/abonavit/private/tesi/training/CMSSW_8_0_28/src/main_tmva_tree_VBF_HToMuMu_v25mu_QCDScalenom_JESnom_509894Events.root";	
-   TString fname_signal_train ="/afs/cern.ch/user/a/abonavit/private/tesi/training/CMSSW_8_0_28/src/training_17gen/main_tmva_tree_VBF_HToMuMu_v25mu_QCDScalenom_JESnom.root";
+   TString fname_signal_train ="/afs/cern.ch/user/a/abonavit/private/tesi/training/CMSSW_8_0_28/src/training_31gennaio/main_tmva_tree_VBF_HToMuMu_v25mu_QCDScalenom_JESnom.root";
    //"/afs/cern.ch/user/a/abonavit/private/tesi/training/CMSSW_8_0_28/src/var_recuperate_Signal.root";	
    
    //
   // bkgDY"/afs/cern.ch/user/a/abonavit/private/tesi/training/CMSSW_8_0_28/src/var_recuperate_Bkg.root"; 
    
 //   TString fname_bg_train ="/afs/cern.ch/user/a/abonavit/private/tesi/training/CMSSW_8_0_28/src/";   
-   TString fname_bg_train ="/afs/cern.ch/user/a/abonavit/private/tesi/training/CMSSW_8_0_28/src/training_17gen/main_tmva_tree_DYJetsToLL_M-105To160-madgraphMLM_v25mu_QCDScalenom_JESnom.root" ;
+   TString fname_bg_train ="/afs/cern.ch/user/a/abonavit/private/tesi/training/CMSSW_8_0_28/src/training_31gennaio/main_tmva_tree_DYJetsToLL_M-105To160-madgraphMLM_v25mu_QCDScalenom_JESnom.root" ;
    //"/afs/cern.ch/user/a/abonavit/private/tesi/training/CMSSW_8_0_28/src/var_recuperate_Bkg.root";   
    //"/afs/cern.ch/user/a/abonavit/private/tesi/training/CMSSW_8_0_28/src/var_recuperate_Bkg.root";
+   
+   
    TFile *input_signal_train = TFile::Open( fname_signal_train );   
    TFile *input_bg_train = TFile::Open( fname_bg_train ); 
  //TTree *signal_train     = (tree*)input_signal_train->Get("TMVA");    //scommentate oggi 15dic2017
    //TTree *bg_train = (TTree*)input_bg_train->Get("TMVA");//scommentate oggi 15dic2017
     //factory->AddSignalTree    ( signal_train,     signalWeight  );   //scommentate oggi 15dic2017
  //factory->AddBackgroundTree( bg_train, bgWeight );//scommentate oggi 15dic2017
+   
+   
+   
+
+
    
   
     
@@ -313,7 +320,7 @@ int TMVAClassification_main(TString variable_name, TString type, std::vector<TSt
    //    factory->PrepareTrainingAndTestTree( mycut,
    //                                         "NSigTrain=3000:NBkgTrain=3000:NSigTest=3000:NBkgTest=3000:SplitMode=Random:!V" );
    factory->PrepareTrainingAndTestTree( mycuts, mycutb,
-                                    "nTrain_Signal=15000:nTrain_Background=15000:NormMode=NumEvents:!V" );
+                                    "nTrain_Signal=80000:nTrain_Background=80000:NormMode=NumEvents:!V" );
  // factory->PrepareTrainingAndTestTree( mycuts, mycutb,"SplitMode=Random:NormMode=NumEvents:!V" );  //june Option
 //factory->PrepareTrainingAndTestTree( mycuts, mycutb,
 //                                        "nTrain_Signal=100000:nTrain_Background=100000:SplitMode=Block:NormMode=NumEvents:!V" );
@@ -339,11 +346,11 @@ int TMVAClassification_main(TString variable_name, TString type, std::vector<TSt
 
    if (Use["BDTD"]) // Decorrelation + Adaptive Boost
       factory->BookMethod( TMVA::Types::kBDT, "BDTD",
-                           "!H:!V:NTrees=400:MinNodeSize=5%:MaxDepth=3:BoostType=AdaBoost:SeparationType=GiniIndex:nCuts=20:VarTransform=Decorrelate" );
-//GOOD UP TO HERE
+                           "!H:!V:NTrees=400:MinNodeSize=5%:MaxDepth=3:BoostType=AdaBoost:SeparationType=GiniIndex:nCuts=20" );
+//GOOD UP TO HERE: 
 
 	char parString[500];
-	sprintf(parString,"!H:!V:NTrees=%i:MinNodeSize=%.2f:BoostType=Grad:Shrinkage=.1:UseBaggedBoost:BaggedSampleFraction=0.6:MaxDepth=%i:nCuts=20",nTrees,MinNodeSize,maxDepth); //correct parString
+	sprintf(parString,"!H:!V:NTrees=%i:MinNodeSize=%.2f:BoostType=Grad:Shrinkage=.1:VarTransform=Decorrelate:UseBaggedBoost:BaggedSampleFraction=0.6:MaxDepth=%i:nCuts=20",nTrees,MinNodeSize,maxDepth); //correct parString VarTransform=Decorrelate:
   // sprintf(parString,"!H:!V:NTrees=%i:MinNodeSize=%.2f:BoostType=Grad:Shrinkage=.1:UseBaggedBoost:BaggedSampleFraction=0.6:MaxDepth=%i:nCuts=20",nTrees,MinNodeSize,maxDepth);
 	// sprintf(parString,"!H:!V:NTrees=%i:MinNodeSize=%.2f:MaxDepth=%i:BoostType=AdaBoost:AdaBoostBeta=0.1:SeparationType=GiniIndex:NegWeightTreatment=IgnoreNegWeightsInTraining:PruneMethod=NoPruning",nTrees,MinNodeSize,maxDepth);
 
@@ -399,13 +406,13 @@ int TMVAClassification_main(TString variable_name, TString type, std::vector<TSt
    std::cout << "==> TMVAClassification is done!" << std::endl;
 
   delete factory;
-cout <<"giulio1"<<endl;
+
    // Launch the GUI for the root macros
    if (!gROOT->IsBatch()) TMVAGui( outfileName );
 //cout<< "out"<<out<<endl;
-cout <<"giulio12"<<endl;
+
 	out.close();
-	cout <<"giulio13"<<endl;
+
 	
 }
 
@@ -414,16 +421,15 @@ cout <<"giulio12"<<endl;
 void modified_TMVAClassification_mainNp1()
 {
 
-const int max_variables_number=39;
-const int primary_variables_number=9;
+const int max_variables_number=40;
+const int primary_variables_number=8;
 
 
-TString variables_names_array_primary[primary_variables_number]={"ll_mass", "Mqq", "RptHard","ll_zstar","softActivityEWK_njets5","ll_pt","W_mass_virtual2","W_Pt_virtual1","diffMassWWH"}
-//TString variables_names_array_primary[primary_variables_number]={"ll_mass", "Mqq", "RptHard", "DeltaEtaQQ", "ll_pt", "ll_eta", "EWKHTsoft", "Jet2q_pt"}; //variabili giugno
-//, "RptHard","thetastarW1", "W_mass_virtual1", "W_Pt_virtual1", "EWKHTsoft"
-//{"ll_mass", "Mqq","W_Pt_virtual2", "RptHard","thetastarHtoWW","DeltaEtaQQ","W_eta_virtual1","E_parton1","EWKHTsoft","theta1"}
+TString variables_names_array_primary[primary_variables_number]={"ll_mass","Mqq","RptHard","ll_zstar","softActivityEWK_njets5","ll_pt","W_mass_virtual2","W_Pt_virtual1"} ;
+// TString variables_names_array_primary[primary_variables_number]={"ll_mass", "Mqq", "RptHard", "DeltaEtaQQ", "ll_pt", "ll_eta", "EWKHTsoft", "Jet2q_pt"}; //variabili giugno
+//, {"ll_mass", "Mqq", "RptHard","ll_zstar","softActivityEWK_njets5","ll_pt","W_mass_virtual2","W_Pt_virtual1"} variabili gennaio
 TString variables_names_array[max_variables_number]={"Inv_mass","ll_mass","energytot","W_mass_virtual1","W_mass_virtual2","qgl_1q","qgl_2q" ,"thetastarW2","thetastarW1","theta1",
-"qq_pt","theta2","W_Pt_virtual1","W_Pt_virtual2","Mqq", "RptHard", "ll_eta", "EWKHTsoft", "DeltaEtaQQ",  "Jet2q_pt","diffMassWWH", "ll_pt","Jet3_pt","ll_zstar","met_pt","softLeadingJet_pt","btagCMVA", "cosThetaStarJet","WWmass","impulsoZ",  "cosThetaPlane","softActivityEWK_njets2","softActivityEWK_njets5","softActivityEWK_njets10","W_eta_virtual1","W_eta_virtual2","E_parton1","E_parton2","deltaM"};
+"qq_pt","theta2","W_Pt_virtual1","W_Pt_virtual2","Mqq", "RptHard", "ll_eta", "EWKHTsoft", "DeltaEtaQQ" ,"diffMassWWH", "ll_pt","Jet3_pt","ll_zstar","met_pt","softLeadingJet_pt","btagCMVA", "cosThetaStarJet","WWmass","impulsoZ", "deltaMRel","randomVariable", "cosThetaPlane","softActivityEWK_njets2","softActivityEWK_njets5","softActivityEWK_njets10","W_eta_virtual1","W_eta_virtual2","E_parton1","E_parton2","deltaM"};
 
 //
 
@@ -463,12 +469,12 @@ if(damettere==true)
 variableNames.push_back(variables_names_array[i]);
 
 }
-/*/
+
  for ( int n = 0; n<variableNames.size(); ++n) {
  TMVAClassification_main(variableNames[n], "mu", variables_names);
  }
 
-/*/
+
 
 
 TMVAClassification_main("nomore", "mu", variables_names);
