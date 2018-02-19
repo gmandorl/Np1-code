@@ -71,7 +71,7 @@ void efficiency_roc_Np1(){
            //8+1
 
 
-   /*     const int n_variables =9;
+   /*     const int n_variables =9;Inv_mass", "energytot", "W_mass_virtual1", "qgl_1q", "qgl_2q", "thetastarW2", "thetastarW1", "theta1", "qq_pt", "theta2", "W_Pt_virtual2", "ll_eta", "EWKHTsoft", "DeltaEtaQQ", "diffMassWWH", "Jet3_pt", "met_pt", "softLeadingJet_pt", "btagCMVA", "cosThetaStarJet", "WWmass", "impulsoZ", "deltaMRel", "randomVariable", "cosThetaPlane", "softActivityEWK_njets2", "softActivityEWK_njets10", "W_eta_virtual1", "W_eta_virtual2", "E_parton1", "E_parton2", "deltaM",
           std::string variables_names[n_variables]={ "nomore_LO_Pray_",  "nomore_LO_IgnoreNegWeightsInTraining_",  "nomore_NLO_Pray_", "nomore_NLO_IgnoreNegWeightsInTraining_" ,"nomore_NLO_noWeight_" ,"nomore_RpHard_OldSample_LO_","nomore_TT_LO_", "nomore_Random_","nomore_Random_LO_TT_"};/*/
 const int n_variables =33;
 std::string variables_names[n_variables]={"Inv_mass", "energytot", "W_mass_virtual1", "qgl_1q", "qgl_2q", "thetastarW2", "thetastarW1", "theta1", "qq_pt", "theta2", "W_Pt_virtual2", "ll_eta", "EWKHTsoft", "DeltaEtaQQ", "diffMassWWH", "Jet3_pt", "met_pt", "softLeadingJet_pt", "btagCMVA", "cosThetaStarJet", "WWmass", "impulsoZ", "deltaMRel", "randomVariable", "cosThetaPlane", "softActivityEWK_njets2", "softActivityEWK_njets10", "W_eta_virtual1", "W_eta_virtual2", "E_parton1", "E_parton2", "deltaM","nomore"}
@@ -109,7 +109,7 @@ std::string variables_names[n_variables]={"Inv_mass", "energytot", "W_mass_virtu
 	for (int i=0;i<n_variables;i++){
 		file_names[i] = "/afs/cern.ch/user/a/abonavit/private/tesi/training/CMSSW_8_0_28/src/training/TMVA-v4.2.0/test/output/TMVA_main_v25_Np1_"+file_names[i];
 //		file_names[i] = "/afs/cern.ch/user/g/gimandor/private/CMSSW_8_0_25/src/NadyaTreeAfterTMVA/TMVA_main_v25_Np1_"+file_names[i];
-		file_names[i] = file_names[i]+"noVarTransform"+end+".root";
+		file_names[i] = file_names[i]+"nominal"+end+".root";
 //		file_names[i] = file_names[i]+"_2var.root";
 	}
 
@@ -324,7 +324,7 @@ cout<< totalChiS <<" " << totalChiB << endl;
 
         c2->cd();
 		frame2->Draw();
-		//frame2->SaveAs("testN.root");
+		frame2->SaveAs("testN.root");
 		c2->SetBottomMargin(.3);
         gPad->SetGridx();
         gPad->SetGridy();
@@ -336,7 +336,7 @@ cout<< totalChiS <<" " << totalChiB << endl;
 		gr->Draw("PLsame");
 		gPad->SetGridx();
         gPad->SetGridy();
-		gr->SaveAs("testNp1/test_noVarTransf.root");
+		gr->SaveAs("testNp1/nominal2.root");
 		
 		TGraph *grS = new TGraph(n_variables,totalProbS_axisx,totalProbS);
 		grS->SetMarkerStyle(20);
@@ -371,7 +371,7 @@ cout<< totalChiS <<" " << totalChiB << endl;
 		line2->SetLineWidth(2);
 		line2->Draw("Lsame");
 //		c2->Print("pippo.png");
-		c2->Print("efficiency_v2m5_mu.png");
+		c2->Print("efficiency_v2m5_munominal.png");
 		//c2->SaveAs("test.root");
         cS->Print("figure/Chi2&KS_prob/chi2_signal.png");
         cB->Print("figure/Chi2&KS_prob/chi2_bkg.png");
